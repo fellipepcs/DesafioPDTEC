@@ -1,9 +1,15 @@
 package com.pdtec.api.service;
 
+import com.pdtec.api.DTO.LoginDTO;
+import com.pdtec.api.DTO.NewPasswordDTO;
+import com.pdtec.api.DTO.UserDTO;
+import com.pdtec.api.config.JwtConfig;
 import com.pdtec.api.entity.User;
 import com.pdtec.api.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -35,11 +41,82 @@ public class UserService {
         return bCryptPasswordEncoder.encode(password);
     }
 
-    public String login() {
-        return "User logged in";
+    public String login(LoginDTO loginDTO) {
+        User user = userRepository.findByName(loginDTO.getName());
+
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        if (!bCryptPasswordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+        return JwtConfig.generateToken(user.getId());
+    }
+    public UserDTO getUserFromToken(String token) {
+        Long id = JwtConfig.getIdFromToken(token);
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setRole(user.getRole());
+        userDTO.setCpf(user.getCpf());
+
+        return userDTO;
     }
 
-    public String updateUser() {
-        return "User updated";
+    public User updateUser(String token, User updatedUser) {
+        Long id = JwtConfig.getIdFromToken(token);
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+        user.setName(updatedUser.getName());
+        user.setEmail(updatedUser.getEmail());
+        user.setCpf(updatedUser.getCpf());
+        user.setRole(updatedUser.getRole());
+
+        return userRepository.save(user);
     }
+
+    public String deleteUser(String token) {
+        Long id = JwtConfig.getIdFromToken(token);
+        userRepository.deleteById(id);
+        return "Usuario deletado com sucesso";
+    }
+
+    public String resetPassword(String token, NewPasswordDTO newPassword) {
+        Long id = JwtConfig.getIdFromToken(token);
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+
+        if (newPassword.getNewPassword().isEmpty() ) {
+            throw new RuntimeException("New password cannot be null or empty");
+        }
+
+        user.setPassword(encodePassword(newPassword.getNewPassword()));
+
+        try {
+            userRepository.save(user);
+            return "Password reset successfully";
+        } catch (Exception e) {
+            // Se ocorrer algum erro durante o salvamento, lance uma exceção
+            throw new RuntimeException("Error resetting password: " + e.getMessage());
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.pdtec.api.entity;
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -9,10 +8,32 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", nullable = false, unique = true)
+    @NotNull
     private String name;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
+    @NotNull
+    private String role;
+    @NotNull
+    private String cpf;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
     public Long getId() {
         return id;
