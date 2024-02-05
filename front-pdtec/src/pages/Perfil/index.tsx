@@ -248,13 +248,16 @@ export function Perfil() {
             </Box>
             <Box
               sx={{
-                justifyContent: "space-evenly",
                 "@media (max-width: 900px)": {
                   flexDirection: "column",
                   alignItems: "center",
+                  gap: "0.5rem",
                 },
                 marginLeft: "0.6rem",
+                justifyContent: "center",
+                alignItems: "center",
                 display: "flex",
+                gap: "3rem",
                 width: "100%",
               }}
             >
@@ -265,7 +268,8 @@ export function Perfil() {
                   marginTop: "1rem",
                   marginBottom: "1rem",
                   padding: "0.8rem",
-                  width: "236px",
+                  width: "150px",
+                  height: "45px",
                   backgroundColor: "#006791",
                 }}
                 onClick={() => navigate("/home")}
@@ -279,7 +283,8 @@ export function Perfil() {
                   marginTop: "1rem",
                   marginBottom: "1rem",
                   padding: "0.8rem",
-                  width: "236px",
+                  width: "150px",
+                  height: "45px",
                 }}
               >
                 {!isLoading ? "Editar" : "Editando..."}
@@ -291,7 +296,8 @@ export function Perfil() {
                   marginTop: "1rem",
                   marginBottom: "1rem",
                   padding: "0.8rem",
-                  width: "236px",
+                  width: "150px",
+                  height: "45px",
                 }}
                 onClick={excluirConta}
               >

@@ -22,7 +22,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         if ("/user/register".equals(path) || "/user/login".equals(path) || "/user/".equals(path)
                 || "/user/update/".equals(path) || "/user/delete/".equals(path)){
-            System.out.println("passou");
             filterChain.doFilter(request, response);
             return;
         }

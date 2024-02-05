@@ -1,8 +1,8 @@
-FROM openjdk:17-alpine
+FROM openjdk:17-alpine 
 
 WORKDIR /app
 
-COPY build/libs/your-application.jar app.jar
+COPY /build/libs/*.jar app.jar
 
 EXPOSE 8080
 
