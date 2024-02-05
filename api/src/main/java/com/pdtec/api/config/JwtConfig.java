@@ -46,7 +46,7 @@ public class JwtConfig {
 
             return true;
 
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }

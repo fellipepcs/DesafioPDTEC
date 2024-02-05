@@ -6,18 +6,23 @@ import {
   Router
 } from "react-router-dom";
 import Login from './pages/Login';
-import { Home } from './pages/home';
+import Cadastro from './pages/Cadastro';
+import { Toaster } from 'react-hot-toast';
+import Home from './pages/home';
+import { Perfil } from './pages/Perfil';
 
 
 function App() {
   return (
-    <BrowserRouter>
+    <><Toaster position="top-right" /><BrowserRouter>
       <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/home" element={<Home></Home>} />
-    </Routes>
-    </BrowserRouter>
+        <Route path="/login" element={<Login />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/home" element={<Home/>} />
+        <Route path="*" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+      </Routes>
+    </BrowserRouter></>
   );
 }
 

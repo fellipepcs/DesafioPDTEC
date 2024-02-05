@@ -18,8 +18,8 @@ export default function Login() {
   async function onSubmit(data: any) {
     setIsLoading(true);
 
-    const user = await login(data.email, data.senha);
-    console.log(user);
+    const user = await login(data.nome, data.senha);
+
     if (user["token"]) {
       navigate("/home");
     } else {
@@ -95,7 +95,7 @@ export default function Login() {
               <TextField
                 type="text"
                 variant="standard"
-                label="Email"
+                label="Nome"
                 sx={{
                     paddingTop: "1rem",
                     width: "350px",
@@ -116,7 +116,7 @@ export default function Login() {
                         borderBottomColor: "white",
                     },
                 }}
-                {...register("email", {
+                {...register("nome", {
                     required: "Este campo é obrigatório",
                 })}
                 />
@@ -148,7 +148,6 @@ export default function Login() {
               <Button
                 type="submit"
                 variant="contained"
-                color="secondary"
                 sx={{
                     marginTop: "4rem",
                     padding: "0.8rem",

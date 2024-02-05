@@ -1,13 +1,12 @@
 package com.pdtec.api.controller;
 
 import com.pdtec.api.DTO.LoginDTO;
-import com.pdtec.api.DTO.NewPasswordDTO;
 import com.pdtec.api.DTO.UserDTO;
 import com.pdtec.api.entity.User;
+import com.pdtec.api.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.pdtec.api.service.UserService;
 
 @RestController
 @RequestMapping("/user")
@@ -53,17 +52,17 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/")
     public ResponseEntity<Object> updateUser(@RequestHeader("Authorization") String header, @RequestBody User user) {
         try {
-            User message = userService.updateUser(header, user);
-            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"" + message + "\"}");
+            userService.updateUser(header, user);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"" + "Usuário atualizado" + "\"}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"" + e.getMessage() + "\"}");
         }
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/")
     public ResponseEntity<Object> deleteUser(@RequestHeader("Authorization") String header) {
         try {
             String message = userService.deleteUser(header);
@@ -72,16 +71,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"" + e.getMessage() + "\"}");
         }
     }
-
-    @PutMapping("/reset-password")
-    public ResponseEntity<Object> resetPassword(@RequestHeader("Authorization") String header,
-                                                @RequestBody NewPasswordDTO newPassword) {
-        try {
-            String message = userService.resetPassword(header, newPassword);
-            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"" + message + "\"}");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"" + e.getMessage() + "\"}");
-        }
-    }
-
  }

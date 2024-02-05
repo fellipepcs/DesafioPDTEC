@@ -6,21 +6,22 @@ import com.pdtec.api.DTO.UserDTO;
 import com.pdtec.api.config.JwtConfig;
 import com.pdtec.api.entity.User;
 import com.pdtec.api.repository.UserRepository;
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
 
- private UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+
     public String register(User user) {
         if (userRepository.existsByName(user.getName())) {
             throw new RuntimeException("Username already exists");
@@ -53,6 +54,7 @@ public class UserService {
         }
         return JwtConfig.generateToken(user.getId());
     }
+
     public UserDTO getUserFromToken(String token) {
         Long id = JwtConfig.getIdFromToken(token);
         Optional<User> optionalUser = userRepository.findById(id);
@@ -90,33 +92,8 @@ public class UserService {
 
     public String deleteUser(String token) {
         Long id = JwtConfig.getIdFromToken(token);
+        System.out.println(id);
         userRepository.deleteById(id);
         return "Usuario deletado com sucesso";
     }
-
-    public String resetPassword(String token, NewPasswordDTO newPassword) {
-        Long id = JwtConfig.getIdFromToken(token);
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-
-        User user = optionalUser.get();
-
-        if (newPassword.getNewPassword().isEmpty() ) {
-            throw new RuntimeException("New password cannot be null or empty");
-        }
-
-        user.setPassword(encodePassword(newPassword.getNewPassword()));
-
-        try {
-            userRepository.save(user);
-            return "Password reset successfully";
-        } catch (Exception e) {
-            // Se ocorrer algum erro durante o salvamento, lance uma exceção
-            throw new RuntimeException("Error resetting password: " + e.getMessage());
-        }
-    }
-
 }
