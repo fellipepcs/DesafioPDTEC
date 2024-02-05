@@ -66,7 +66,6 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 16px",
         }}
       >
         <Box>
@@ -123,7 +122,6 @@ export default function Home() {
           width: "35%",
           height: "40%",
           borderRadius: "10px",
-          overflowY: "scroll",
           justifyContent: "center",
           backgroundColor: "#fff",
           "@media (max-width: 900px)": {
